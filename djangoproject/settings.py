@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     "myapp.apps.MyappConfig",
     "ecom.apps.EcomConfig",
     "cart.apps.CartConfig",
-    "users.apps.UsersConfig"
+    "users.apps.UsersConfig",
+    "orders.apps.OrdersConfig"
 ]
 
 
