@@ -1,0 +1,161 @@
+{% extends 'ecom/base.html' %}
+{% load static %}
+
+{% block title %}Your Cart{% endblock %}
+
+{% block body %}
+<div class="cart-page">
+
+    <!-- Header -->
+    <div class="cart-page__header">
+        <div>
+            <h1 class="cart-page__title">Your Cart</h1>
+            <p class="cart-page__count">
+                {{ cart|length }} item{{ cart|length|pluralize }} in your cart
+            </p>
+        </div>
+        <a href="{% url 'ecom:index' %}" class="btn-secondary hidden sm:inline-flex">
+            ← Continue Shopping
+        </a>
+    </div>
+
+    {% if cart|length > 0 %}
+
+        <div class="cart-layout">
+
+            <!-- ================= Items ================= -->
+            <div class="cart-items">
+
+                {% for item in cart %}
+                <div class="cart-item" data-product-id="{{ item.product.id }}">
+
+                    <a href="{% url 'ecom:detail' item.product.slug %}" class="cart-item__image-wrapper">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}"
+                                 alt="{{ item.product.name }}"
+                                 class="cart-item__image">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-300 text-xs">
+                                No image
+                            </div>
+                        {% endif %}
+                    </a>
+
+                    <div class="cart-item__info">
+                        <a href="{% url 'ecom:detail' item.product.slug %}"
+                           class="cart-item__name hover:text-blue-600">
+                            {{ item.product.name }}
+                        </a>
+                        <p class="cart-item__price">${{ item.price }} each</p>
+                    </div>
+
+                    <div class="cart-item__controls">
+                        <div class="cart-item__qty">
+                            <button type="button"
+                                    class="cart-item__qty-btn"
+                                    data-action="decrease">−</button>
+                            <span class="cart-item__qty-value">{{ item.qty }}</span>
+                            <button type="button"
+                                    class="cart-item__qty-btn"
+                                    data-action="increase">+</button>
+                        </div>
+
+                        <span class="cart-item__subtotal">${{ item.total }}</span>
+
+                        <button type="button"
+                                class="cart-item__remove"
+                                aria-label="Remove item"
+                                data-action="remove">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="w-5 h-5"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+                <div class="p-5 sm:hidden">
+                    <a href="{% url 'ecom:index' %}" class="btn-secondary w-full">
+                        ← Continue Shopping
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- ================= Summary ================= -->
+            <aside class="cart-summary">
+                <h2 class="cart-summary__title">Order Summary</h2>
+
+                <div class="cart-summary__row">
+                    <span>Shipping</span>
+                    <span class="text-green-600 font-semibold">Free</span>
+                </div>
+
+                <div class="cart-summary__total">
+                    <span>Total</span>
+                    <span class="text-blue-600">${{ cart.total_price }}</span>
+                </div>
+
+                <div class="cart-summary__actions">
+                    <a href="#" class="btn-primary w-full">
+                        Proceed to Checkout
+                    </a>
+                    <a href="{% url 'ecom:index' %}" class="btn-outline w-full">
+                        Continue Shopping
+                    </a>
+
+                    <!-- ✅ Clear Cart Button -->
+                    <button type="button"
+                            id="clear-cart-btn"
+                            class="btn-outline-danger">
+                        Clear Cart
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-200 flex items-center justify-center gap-4 text-xs text-gray-500">
+                    <span>🔒 Secure</span>
+                    <span>↩️ Easy returns</span>
+                    <span>🚚 Free shipping</span>
+                </div>
+            </aside>
+
+        </div>
+
+    {% else %}
+
+        <div class="cart-empty">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="cart-empty__icon"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <h2 class="cart-empty__title">Your cart is empty</h2>
+            <p class="cart-empty__text">
+                Looks like you haven't added anything yet.
+            </p>
+            <a href="{% url 'ecom:index' %}" class="btn-primary inline-flex">
+                Start Shopping
+            </a>
+        </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cart/cart.js' %}" defer></script>
+{% endblock %}

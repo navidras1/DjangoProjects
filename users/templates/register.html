@@ -1,0 +1,100 @@
+{% extends 'ecom/base.html' %}
+
+{% block title %}Register - ShopMate{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Header -->
+        <div class="auth-header">
+            <h1 class="auth-header__title">Create your account</h1>
+            <p class="auth-header__subtitle">
+                Already have an account?
+                <a href="{% url 'users:login' %}" class="auth-header__link">
+
+                    Sign in
+                </a>
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-error">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Loop over all fields -->
+            {% for field in form %}
+                <div class="auth-field">
+                    <label for="{{ field.id_for_label }}" class="auth-field__label">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <div class="auth-field__help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <!-- Terms checkbox -->
+            <div class="auth-checkbox">
+                <input type="checkbox"
+                       id="terms"
+                       name="terms"
+                       required
+                       class="auth-checkbox__input">
+                <label for="terms" class="auth-checkbox__label">
+                    I agree to the
+                    <a href="#" class="auth-checkbox__link">Terms of Service</a>
+                    and
+                    <a href="#" class="auth-checkbox__link">Privacy Policy</a>
+                </label>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="auth-submit">
+                Create Account
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+            <div class="auth-divider__line"></div>
+            <span class="auth-divider__text">Or</span>
+            <div class="auth-divider__line"></div>
+        </div>
+
+        <!-- Social buttons -->
+        <div class="auth-socials">
+            <button type="button" class="auth-social-btn">
+                <span>🔵</span> Google
+            </button>
+            <button type="button" class="auth-social-btn">
+                <span>🔷</span> Facebook
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Footer note -->
+    <p class="auth-footer">
+        By creating an account, you agree to our
+        <a href="#" class="auth-footer__link">Terms</a>.
+    </p>
+</div>
+{% endblock %}

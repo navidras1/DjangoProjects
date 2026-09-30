@@ -1,0 +1,86 @@
+{% extends 'ecom/base.html' %}
+
+{% block title %}Sign In - ShopMate{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Header -->
+        <div class="auth-header">
+            <h1 class="auth-header__title">Welcome back</h1>
+            <p class="auth-header__subtitle">
+                Don't have an account?
+                <a href="{% url 'users:register' %}" class="auth-header__link">
+                    Sign up
+                </a>
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="auth-error">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Fields -->
+            {% for field in form %}
+                <div class="auth-field">
+                    <label for="{{ field.id_for_label }}" class="auth-field__label">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <div class="auth-field__help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <!-- Forgot password -->
+            <div class="flex justify-end">
+                <a href="#" class="text-sm text-blue-600 hover:underline">
+                    Forgot password?
+                </a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="auth-submit">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+            <div class="auth-divider__line"></div>
+            <span class="auth-divider__text">Or</span>
+            <div class="auth-divider__line"></div>
+        </div>
+
+        <!-- Social buttons -->
+        <div class="auth-socials">
+            <button type="button" class="auth-social-btn">
+                <span>🔵</span> Google
+            </button>
+            <button type="button" class="auth-social-btn">
+                <span>🔷</span> Facebook
+            </button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

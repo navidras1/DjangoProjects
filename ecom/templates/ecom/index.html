@@ -1,0 +1,71 @@
+{% extends 'ecom/base.html' %}
+{% block title %}Index{% endblock title %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="page-container">
+
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">Our Products</h1>
+            <p class="page-subtitle">Browse our latest collection</p>
+        </div>
+
+        <!-- Filter Row -->
+        <div class="filter-row">
+            <div class="search-wrapper">
+                <input type="text" placeholder="Search products..." class="input-with-icon">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+            <select class="select">
+                <option>Sort by: Featured</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+            </select>
+        </div>
+
+        <!-- Product Grid -->
+        {% if products %}
+        <div class="product-grid">
+            {% for item in products %}
+            <div class="product-card">
+
+                <span class="badge-sale">SALE</span>
+
+                <div class="product-card__image-wrapper">
+                    <a href="{% url 'ecom:detail' item.slug %}"><img src="{{ item.image.url }}" alt="{{ item.name }}"
+                                      class="product-card__image"></a>
+                </div>
+
+                <div class="product-card__body">
+                    <a href="{% url 'ecom:detail' item.slug %}"> <h2 class="product-card__name">{{ item.name }}</h2></a>
+                    <p class="product-card__description">{{ item.description }}</p>
+
+                    <div class="product-card__footer">
+                        <span class="product-card__price">
+                            ${{ item.price|floatformat:2 }}
+                        </span>
+                        <button class="btn-primary">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <svg class="empty-state__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+            <h3 class="empty-state__title">No products found</h3>
+            <p class="empty-state__text">Check back later for new arrivals.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock body %}

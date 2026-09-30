@@ -1,0 +1,12 @@
+{#{% extends 'ecom/base.html' %}#}
+{#{% block title %}#}
+{#    email verification#}
+{#{% endblock %}#}
+{##}
+{#{% block body %}#}
+Thank you for registering on out website please verify by clcking the link below:
+
+<!---->
+http://{{ domain }}{% url 'email_verification' uidb64=uid token=token %}
+<!---->
+{#{% endblock %}#}

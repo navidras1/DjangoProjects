@@ -1,0 +1,172 @@
+{% load tailwind_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}ShopMate{% endblock %}</title>
+    {% tailwind_css %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- ==============================================
+         TOP BAR (Utility Navigation)
+         ============================================== -->
+    <div class="topbar">
+        <div class="topbar__inner">
+            <!-- Left: Categories -->
+            <div class="topbar__left">
+                <button class="topbar__menu" type="button">
+                    <span>☰</span>
+                    <span>Categories</span>
+                </button>
+            </div>
+
+            <!-- Right: Utility Links -->
+            <div class="topbar__links">
+                <a href="#" class="topbar__link">Sell on ShopMate</a>
+                <a href="#" class="topbar__link">Track Order</a>
+                <a href="#" class="topbar__link">USD</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MAIN HEADER
+         ============================================== -->
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__row">
+
+                <!-- Logo -->
+                <a href="{% url 'ecom:index' %}" class="header__logo">
+                    Shop<span class="header__logo-accent">Mate</span>
+                </a>
+
+                <!-- Search -->
+                <div class="header__search">
+                    <form action="#" method="get" class="header__search-form">
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="Search products..."
+                            class="header__search-input"
+                        />
+                        <button type="submit" class="header__search-btn">
+                            Search
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Actions -->
+                <!-- Actions -->
+<div class="header__actions">
+
+    <!-- Mobile Search Toggle -->
+    <button type="button" class="header__mobile-toggle md:hidden" aria-label="Search">
+        🔍
+    </button>
+
+    <!-- Cart -->
+    <a href="{% url 'cart:cartOverview' %}" class="header__icon-btn" aria-label="Cart">
+        <span class="header__icon">🛒</span>
+        {% if cart|length > 0 %}
+            <span id="cart-qty" class="header__cart-badge">{{ cart|length }}</span>
+        {% else %}
+            <span id="cart-qty" class="header__cart-badge hidden"></span>
+        {% endif %}
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Welcome -->
+        <span class="text-white text-sm font-medium">
+            Welcome, <strong>{{ user.username }}</strong>
+        </span>
+
+        <!-- Logout -->
+        <form method="post" action="{% url 'users:logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit"
+                    class="text-white text-sm font-medium hover:text-gray-200 transition">
+                Logout
+            </button>
+        </form>
+    {% else %}
+        <a href="{% url 'users:login' %}"
+       class="px-4 py-1.5 text-sm font-medium text-white
+              border border-white/60 rounded-lg
+              hover:bg-white hover:text-blue-600 transition">
+        Login
+    </a>
+    {% endif %}
+
+    <!-- Mobile Menu Toggle -->
+    <button type="button" class="header__mobile-toggle md:hidden" aria-label="Menu">
+        ☰
+    </button>
+</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==============================================
+         MAIN CONTENT
+         ============================================== -->
+    <main class="flex-1">
+        {% block body %}{% endblock %}
+    </main>
+
+    <!-- ==============================================
+         FOOTER
+         ============================================== -->
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-3">
+                        Shop<span class="text-blue-400">Mate</span>
+                    </h3>
+                    <p class="text-sm text-gray-400">
+                        Your one-stop shop for everything you need.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Shop</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'ecom:index' %}" class="hover:text-white transition">All Products</a></li>
+                        <li><a href="#" class="hover:text-white transition">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-white transition">Sale</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Support</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white transition">Returns</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-800 text-center text-xs text-gray-500">
+                &copy; {% now "Y" %} ShopMate. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
