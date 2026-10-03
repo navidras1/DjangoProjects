@@ -1,71 +1,185 @@
 {% extends 'ecom/base.html' %}
 {% load static %}
 
-{% block title %}My Profile - ShopMate{% endblock %}
+{% block title %}My Account - ShopMate{% endblock %}
 
 {% block body %}
-<div class="auth-page">
-    <div class="auth-card">
+<div class="cart-page">
 
-        <!-- Header -->
-        <div class="auth-header">
-            <h1 class="auth-header__title">My Profile</h1>
-            <p class="auth-header__subtitle">
-                Update your account details
+    <!-- Page Header -->
+    <div class="cart-page__header">
+        <div>
+            <h1 class="cart-page__title">My Account</h1>
+            <p class="cart-page__count">
+                Manage your profile, security, and delivery addresses
             </p>
         </div>
+    </div>
 
-        <!-- Form -->
-        <form method="post" class="auth-form">
-            {% csrf_token %}
+    <div class="cart-layout">
 
-            <!-- Non-field errors -->
-            {% if userForm.non_field_errors %}
-                <div class="auth-error">
-                    {% for error in userForm.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
+        <!-- ============================================
+             SIDEBAR (User card + navigation)
+             ============================================ -->
+        <aside>
+
+            <!-- User Card -->
+            <div class="dashboard-card text-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-blue-600 text-white text-3xl font-bold
+                            flex items-center justify-center mx-auto mb-4">
+                    {{ user.username|slice:":1"|upper }}
                 </div>
-            {% endif %}
+                <h2 class="text-xl font-bold text-gray-900">{{ user.username }}</h2>
+                <p class="text-sm text-gray-500 mt-1">{{ user.email|default:"No email set" }}</p>
+                <p class="text-xs text-gray-400 mt-3">
+                    Member since {{ user.date_joined|date:"M Y" }}
+                </p>
+            </div>
 
-            <!-- Fields -->
-            {% for field in userForm %}
-                <div class="auth-field">
-                    <label for="{{ field.id_for_label }}" class="auth-field__label">
-                        {{ field.label }}
-                    </label>
+            <!-- Navigation -->
+            <nav class="dashboard-card p-0 overflow-hidden">
+                <a href="#profile-info"
+                   class="flex items-center gap-3 px-5 py-3
+                          border-l-4 border-blue-600 bg-blue-50
+                          text-blue-700 font-medium">
+                    <span>👤</span>
+                    <span>Profile Info</span>
+                </a>
+                <a href="{% url 'users:password_reset' %}"
+                   class="flex items-center gap-3 px-5 py-3
+                          border-l-4 border-transparent
+                          text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition">
+                    <span>🔒</span>
+                    <span>Change Password</span>
+                </a>
+                <a href="{% url 'orders:checkout' %}"
+                   class="flex items-center gap-3 px-5 py-3
+                          border-l-4 border-transparent
+                          text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition">
+                    <span>📍</span>
+                    <span>My Addresses</span>
+                </a>
+                <a href="{% url 'ecom:index' %}"
+                   class="flex items-center gap-3 px-5 py-3
+                          border-l-4 border-transparent
+                          text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition">
+                    <span>🛍️</span>
+                    <span>Back to Shop</span>
+                </a>
+            </nav>
 
-                    {{ field }}
+        </aside>
 
-                    {% if field.help_text %}
-                        <div class="auth-field__help">
-                            {{ field.help_text|safe }}
+        <!-- ============================================
+             MAIN CONTENT
+             ============================================ -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- ====== Profile Info Card ====== -->
+            <section id="profile-info" class="dashboard-card">
+                <div class="mb-6 pb-4 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-900">Profile Information</h2>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Update your username and email address
+                    </p>
+                </div>
+
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+
+                    {% if userForm.non_field_errors %}
+                        <div class="auth-error">
+                            {% for error in userForm.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
                         </div>
                     {% endif %}
 
-                    {% for error in field.errors %}
-                        <p class="auth-field__error">{{ error }}</p>
+                    {% for field in userForm %}
+                        <div class="auth-field">
+                            <label for="{{ field.id_for_label }}" class="auth-field__label">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="auth-field__help">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <p class="auth-field__error">{{ error }}</p>
+                            {% endfor %}
+                        </div>
                     {% endfor %}
+
+                    <button type="submit" class="auth-submit">
+                        Save Changes
+                    </button>
+                </form>
+            </section>
+
+            <!-- ====== Change Password Card ====== -->
+            <section class="dashboard-card">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-50 flex items-center justify-center text-2xl">
+                            🔒
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Change Password</h2>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Update your password to keep your account secure
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{% url 'users:password_reset' %}" class="btn-outline">
+                        Change
+                    </a>
                 </div>
-            {% endfor %}
+            </section>
 
-            <!-- Submit -->
-            <button type="submit" class="auth-submit">
-                Save Changes
-            </button>
-        </form>
+            <!-- ====== Addresses Card ====== -->
+            <section class="dashboard-card">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-2xl">
+                            📍
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Delivery Addresses</h2>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Manage the addresses where we deliver your orders
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{% url 'orders:checkout' %}" class="btn-outline">
+                        Manage
+                    </a>
+                </div>
+            </section>
 
-        <!-- Footer links -->
-        <p class="auth-footer">
-            <a href="{% url 'users:password_reset' %}" class="auth-footer__link">
-                Change Password
-            </a>
-            &nbsp;·&nbsp;
-            <a href="{% url 'ecom:index' %}" class="auth-footer__link">
-                ← Back to Shop
-            </a>
-        </p>
+            <!-- ====== Logout Card ====== -->
+            <section class="dashboard-card">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-2xl">
+                            🚪
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Sign Out</h2>
+                            <p class="text-sm text-gray-500 mt-1">
+                                End your session on this device
+                            </p>
+                        </div>
+                    </div>
+                    <form method="post" action="{% url 'users:logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-outline-danger w-auto">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </section>
 
+        </div>
     </div>
 </div>
 {% endblock %}
