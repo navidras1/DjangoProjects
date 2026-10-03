@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
@@ -6,8 +7,9 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib import messages
 
-from .forms import CreateUserForm, LoginForm
+from .forms import CreateUserForm, LoginForm, UpdateUserForm
 from .tokens import account_activation_token
 
 
@@ -67,3 +69,18 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('ecom:index')
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        userForm = UpdateUserForm(request.POST, instance=request.user)
+        if userForm.is_valid():
+            userForm.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('users:profile')
+    else:
+        userForm = UpdateUserForm(instance=request.user)
+
+    return render(request, 'profile.html', {'userForm': userForm})
+
+

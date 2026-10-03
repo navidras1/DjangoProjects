@@ -1,0 +1,71 @@
+{% extends 'ecom/base.html' %}
+{% load static %}
+
+{% block title %}My Profile - ShopMate{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Header -->
+        <div class="auth-header">
+            <h1 class="auth-header__title">My Profile</h1>
+            <p class="auth-header__subtitle">
+                Update your account details
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <!-- Non-field errors -->
+            {% if userForm.non_field_errors %}
+                <div class="auth-error">
+                    {% for error in userForm.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Fields -->
+            {% for field in userForm %}
+                <div class="auth-field">
+                    <label for="{{ field.id_for_label }}" class="auth-field__label">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <div class="auth-field__help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <!-- Submit -->
+            <button type="submit" class="auth-submit">
+                Save Changes
+            </button>
+        </form>
+
+        <!-- Footer links -->
+        <p class="auth-footer">
+            <a href="{% url 'users:password_reset' %}" class="auth-footer__link">
+                Change Password
+            </a>
+            &nbsp;·&nbsp;
+            <a href="{% url 'ecom:index' %}" class="auth-footer__link">
+                ← Back to Shop
+            </a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}

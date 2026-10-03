@@ -206,3 +206,11 @@ DEFAULT_FROM_EMAIL = "noreply@shopmate.com"
 #     },
 # }
 
+
+# ==========================================================
+# AUTHENTICATION REDIRECTS
+# ==========================================================
+
+LOGIN_URL = '/users/login/'          # where to redirect unauthenticated users
+LOGIN_REDIRECT_URL = '/'             # after successful login
+LOGOUT_REDIRECT_URL = '/'            # after logout
