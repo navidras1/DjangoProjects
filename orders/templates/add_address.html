@@ -1,0 +1,134 @@
+{% extends 'ecom/base.html' %}
+{% load static %}
+
+{% block title %}Add Address - ShopMate{% endblock %}
+
+{% block body %}
+    <div class="auth-page">
+        <div class="auth-card auth-card--wide">
+
+            <!-- Header -->
+            <div class="auth-header">
+                <h1 class="auth-header__title">Add Address</h1>
+                <p class="auth-header__subtitle">
+                    Where should we deliver your order?
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="auth-error">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Full name (full width) -->
+                <div class="auth-field">
+                    <label for="{{ form.full_name.id_for_label }}" class="auth-field__label">
+                        Full Name
+                    </label>
+                    {{ form.full_name }}
+                    {% for error in form.full_name.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Phone (full width) -->
+                <div class="auth-field">
+                    <label for="{{ form.phone.id_for_label }}" class="auth-field__label">
+                        Phone Number
+                    </label>
+                    {{ form.phone }}
+                    {% for error in form.phone.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Address lines (full width each) -->
+                <div class="auth-field">
+                    <label for="{{ form.line1.id_for_label }}" class="auth-field__label">
+                        Address Line 1
+                    </label>
+                    {{ form.line1 }}
+                    {% for error in form.line1.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="auth-field">
+                    <label for="{{ form.line2.id_for_label }}" class="auth-field__label">
+                        Address Line 2 <span class="text-gray-400 font-normal">(optional)</span>
+                    </label>
+                    {{ form.line2 }}
+                    {% for error in form.line2.errors %}
+                        <p class="auth-field__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <!-- City + State side by side -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="auth-field">
+                        <label for="{{ form.city.id_for_label }}" class="auth-field__label">
+                            City
+                        </label>
+                        {{ form.city }}
+                        {% for error in form.city.errors %}
+                            <p class="auth-field__error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="{{ form.state.id_for_label }}" class="auth-field__label">
+                            State / Province
+                        </label>
+                        {{ form.state }}
+                        {% for error in form.state.errors %}
+                            <p class="auth-field__error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Postal code + Country side by side -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="auth-field">
+                        <label for="{{ form.postal_code.id_for_label }}" class="auth-field__label">
+                            Postal Code
+                        </label>
+                        {{ form.postal_code }}
+                        {% for error in form.postal_code.errors %}
+                            <p class="auth-field__error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="{{ form.country.id_for_label }}" class="auth-field__label">
+                            Country
+                        </label>
+                        {{ form.country }}
+                        {% for error in form.country.errors %}
+                            <p class="auth-field__error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="auth-submit">
+                    Save Address
+                </button>
+            </form>
+
+            <!-- Footer link -->
+            <p class="auth-footer">
+                <a href="{% url 'ecom:index' %}" class="auth-footer__link">
+                    ← Back to Shop
+                </a>
+            </p>
+
+        </div>
+    </div>
+{% endblock %}

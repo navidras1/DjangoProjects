@@ -1,0 +1,41 @@
+{% extends 'ecom/base.html' %}
+
+{% block title %}Order Confirmed - ShopMate{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-card text-center">
+
+        <div class="text-6xl mb-4">🎉</div>
+
+        <h1 class="auth-header__title">Order Confirmed!</h1>
+        <p class="auth-header__subtitle mt-3">
+            Thank you for your order. We'll be in touch soon.
+        </p>
+
+        <div class="mt-8 p-4 bg-gray-50 rounded-lg text-left text-sm">
+            <p class="text-gray-500 mb-1">Order Number</p>
+            <p class="font-bold text-gray-900 text-lg">#{{ order.id }}</p>
+
+            <p class="text-gray-500 mt-4 mb-1">Total</p>
+            <p class="font-bold text-blue-600 text-lg">${{ order.total_price|floatformat:2 }}</p>
+
+            <p class="text-gray-500 mt-4 mb-1">Delivery to</p>
+            <p class="text-gray-700">
+                {{ order.full_name }}<br>
+                {{ order.address_line1 }}<br>
+                {% if order.address_line2 %}{{ order.address_line2 }}<br>{% endif %}
+                {{ order.city }}, {{ order.state }} {{ order.postal_code }}<br>
+                {{ order.country }}
+            </p>
+        </div>
+
+        <div class="mt-8 space-y-3">
+            <a href="{% url 'ecom:index' %}" class="auth-submit block text-center">
+                Continue Shopping
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
